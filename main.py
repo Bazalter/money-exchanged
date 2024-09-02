@@ -13,9 +13,12 @@ async def give_exchange(value: Annotated[int | float, Path(..., ge=0)], ex: Exch
         raise HTTPException(status_code=400, detail="Value must be greater than or equal to 0")
     exchange = Valutes(value, ex.your_currency, ex.ex_currency)
     my_salary = round(exchange.calc_salary(), 2)
-    if my_salary <= 1000:
-        return f"Твоя зпка равна {my_salary} {ex.ex_currency} и это очень мало, ты бич"
-    elif my_salary <= 2500:
+    my_salary_usd = round(my_salary * exchange.valutes[ex.ex_currency]["Value"] / exchange.valutes["USD"]["Value"], 2)
+    if my_salary_usd <= 1000:
+        return (f"Твоя зпка равна {my_salary} {ex.ex_currency} и это в баксах"
+                f" {my_salary_usd}"
+                f" очень мало, ты бич")
+    elif my_salary_usd <= 2500:
         return f"Твоя зпка равна {my_salary} {ex.ex_currency} ты не так уж и слаб, но можешь больше"
     else:
         return f"Твоя зпка равна {my_salary} {ex.ex_currency} нам то не пизди, ты столько не зарабатываешь"
