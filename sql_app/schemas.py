@@ -1,5 +1,5 @@
 from typing import Literal
-from pydantic import BaseModel, SkipValidation
+from pydantic import BaseModel, SkipValidation, Field
 
 
 CurrencyType = Literal[
@@ -8,8 +8,7 @@ CurrencyType = Literal[
     "SGD", "TJS", "THB", "TRY", "TMT", "UZS", "UAH", "CZK", "SEK", "CHF", "RSD", "ZAR", "KRW", "JPY", "RUB"]
 
 
-class Exchanger(BaseModel):
-    # value: int | float
+class ExchangerCreate(BaseModel):
     your_currency: CurrencyType = "RUB"
     ex_currency: CurrencyType = "USD"
 
