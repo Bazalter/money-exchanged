@@ -6,7 +6,7 @@ from usd import Valutes
 from sqlalchemy.orm import Session
 from sql_app.models import DailyCounter as DailyCounterModel
 from sql_app.schemas import ExchangerCreate
-from sql_app.cryd import create_exchanger
+from sql_app.crud import create_exchanger, update_counter
 from sql_app.database import SessionLocal, engine, Base
 
 app = FastAPI()
@@ -56,16 +56,10 @@ async def give_exchange(
         db.rollback()
         raise HTTPException(status_code=500, detail="Error creating exchanger data")
 
-    today = date.today()
-    counter = db.query(DailyCounterModel).filter(DailyCounterModel.count_date == today).first()
-
-    if counter:
-        counter.row_count += 1
-    else:
-        counter = DailyCounterModel(count_date=today, row_count=1)
-        db.add(counter)
     try:
-        db.commit()
+        update_counter(
+            db=db
+        )
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail="Database commit error")

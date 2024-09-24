@@ -1,5 +1,8 @@
+from datetime import date
+
 from sqlalchemy.orm import Session
 from .models import Exchanger
+from sql_app.models import DailyCounter as DailyCounterModel
 
 
 def create_exchanger(db: Session, value1: float,name_currency1: str,
@@ -16,3 +19,15 @@ def create_exchanger(db: Session, value1: float,name_currency1: str,
     db.commit()
     db.refresh(db_exchanger)
     return db_exchanger
+
+
+def update_counter(db: Session):
+    today = date.today()
+    counter = db.query(DailyCounterModel).filter(DailyCounterModel.count_date == today).first()
+
+    if counter:
+        counter.row_count += 1
+    else:
+        counter = DailyCounterModel(count_date=today, row_count=1)
+        db.add(counter)
+    db.commit()
