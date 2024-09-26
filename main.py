@@ -9,7 +9,7 @@ from sql_app.schemas import ExchangerCreate
 from sql_app.crud import create_exchanger, update_counter
 from sql_app.database import SessionLocal, engine, Base
 
-app = FastAPI()
+app = FastAPI(docs_url="/docs", redoc_url="/redoc", openapi_url="/openapi.json")
 
 
 def get_db():

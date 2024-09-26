@@ -1,5 +1,5 @@
 from typing import Literal
-from pydantic import BaseModel, SkipValidation, Field
+from pydantic import BaseModel, ConfigDict
 
 
 CurrencyType = Literal[
@@ -9,8 +9,9 @@ CurrencyType = Literal[
 
 
 class ExchangerCreate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     your_currency: CurrencyType = "RUB"
     ex_currency: CurrencyType = "USD"
 
-    class Config:
-        arbitrary_types_allowed = True
+    # class Config:
+    #     arbitrary_types_allowed = True
