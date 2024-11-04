@@ -1,6 +1,6 @@
 from .database import Base
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Float, Date, Integer
+from sqlalchemy import String, Float, Date, Integer, Boolean
 from datetime import date, datetime
 
 
@@ -21,3 +21,14 @@ class DailyCounter(Base):
     count_date: Mapped[date] = mapped_column(Date, primary_key=True, default=datetime.today())
     row_count: Mapped[int] = mapped_column(Integer, default=0)
 
+
+class UserModel(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String, unique=True)
+    full_name: Mapped[str] = mapped_column(String)
+    email: Mapped[str] = mapped_column(String, unique=True)
+    password: Mapped[str] = mapped_column(String, unique=True)
+    hashed_password: Mapped[str] = mapped_column(String, unique=True)
+    disabled: Mapped[bool] = mapped_column(Boolean)

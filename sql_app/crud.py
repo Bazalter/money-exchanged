@@ -1,20 +1,13 @@
 from datetime import date
 
 from sqlalchemy.orm import Session
-from .models import Exchanger
+from .models import Exchanger, UserModel
 from sql_app.models import DailyCounter as DailyCounterModel
 
 
-def create_exchanger(db: Session, value1: float,name_currency1: str,
-                    value2: float, name_currency2: str,
-                    value_usd: float) -> Exchanger:
-    db_exchanger = Exchanger(
-        value1=value1,
-        name_currency1=name_currency1,
-        value2=value2,
-        name_currency2=name_currency2,
-        value_usd=value_usd
-    )
+def create_exchanger(db: Session, **kwargs) -> Exchanger:
+    db_exchanger = Exchanger(**kwargs)
+
     db.add(db_exchanger)
     db.commit()
     db.refresh(db_exchanger)
@@ -31,3 +24,13 @@ def update_counter(db: Session):
         counter = DailyCounterModel(count_date=today, row_count=1)
         db.add(counter)
     db.commit()
+
+
+def create_user(db: Session, **kwargs) -> UserModel:
+    db_create_user = UserModel(**kwargs)
+
+    db.add(db_create_user)
+    db.commit()
+    db.refresh(db_create_user)
+    return db_create_user
+
