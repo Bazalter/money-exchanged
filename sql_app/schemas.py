@@ -17,3 +17,10 @@ class ExchangerCreate(BaseModel):
     #     arbitrary_types_allowed = True
 
 
+class Exchanger(BaseModel):
+    id: int
+    value1: float
+    name_currency1: str
+    value2: float
+    name_currency2: str
+    value_usd: float

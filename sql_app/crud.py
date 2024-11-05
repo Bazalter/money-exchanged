@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from .models import Exchanger, UserModel
 from sql_app.models import DailyCounter as DailyCounterModel
 
-
 def create_exchanger(db: Session, **kwargs) -> Exchanger:
     db_exchanger = Exchanger(**kwargs)
 
@@ -33,4 +32,8 @@ def create_user(db: Session, **kwargs) -> UserModel:
     db.commit()
     db.refresh(db_create_user)
     return db_create_user
+
+
+def all_rows(db: Session):
+    return db.query(Exchanger).all()
 

@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-
+from sql_app.schemas import Exchanger
+from sql_app.crud import all_rows
 from sql_app.database import SessionLocal
 from .crud import authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
 from .crud import get_current_active_user
@@ -60,3 +61,12 @@ async def read_users_me(
         current_user: Annotated[UserInDB, Depends(get_current_active_user)]
 ):
     return current_user
+
+
+@router.get("/all", response_model=list[Exchanger])
+async def all_records(
+        current_user: Annotated[UserInDB, Depends(get_current_user)],
+        db: dp_dependency
+):
+    return all_rows(db=db)
+
