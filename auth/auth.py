@@ -5,12 +5,13 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+from sql_app.models import UserModel
 from sql_app.schemas import Exchanger
 from sql_app.crud import all_rows
 from sql_app.database import SessionLocal
 from .crud import authenticate_user, ACCESS_TOKEN_EXPIRE_MINUTES, create_access_token, get_current_user
 from .crud import get_current_active_user
-from .schemas import Token, UserInDB
+from .schemas import Token, UserInDB, UserUpdate
 
 
 router = APIRouter(
@@ -70,3 +71,25 @@ async def all_records(
 ):
     return all_rows(db=db)
 
+
+@router.patch("/update/{user_id}", response_model=UserUpdate)
+async def update_user(
+        current_user: Annotated[UserInDB, Depends(get_current_user)],
+        db: dp_dependency,
+        user_id: int,
+        update_data: UserUpdate
+):
+    user = db.query(UserModel).filter(UserModel.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if current_user.role != "admin":
+        raise HTTPException(status_code=400, detail="You have not permission")
+
+    for key, value in update_data.dict(exclude_unset=True).items():
+        setattr(user, key, value)
+
+    db.commit()
+    db.refresh(user)
+
+    return user

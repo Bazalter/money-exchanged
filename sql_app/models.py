@@ -31,4 +31,5 @@ class UserModel(Base):
     email: Mapped[str] = mapped_column(String, unique=True)
     password: Mapped[str] = mapped_column(String, unique=True)
     hashed_password: Mapped[str] = mapped_column(String, unique=True)
+    role: Mapped[str] = mapped_column(String, server_default="user")
     disabled: Mapped[bool] = mapped_column(Boolean)
