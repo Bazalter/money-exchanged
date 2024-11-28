@@ -47,8 +47,8 @@ async def give_exchange(
     my_salary_usd = round(my_salary * exchange.valutes[ex.ex_currency]["Value"] / exchange.valutes["USD"]["Value"], 2)
     if my_salary_usd <= 1000:
         result = (f"Твоя зпка равна {my_salary} {ex.ex_currency} и это в баксах"
-                f" {my_salary_usd}"
-                f" очень мало, ты бич")
+                  f" {my_salary_usd}"
+                  f" очень мало, ты бич")
     elif my_salary_usd <= 2500:
         result = f"Твоя зпка равна {my_salary} {ex.ex_currency} ты не так уж и слаб, но можешь больше"
     else:
